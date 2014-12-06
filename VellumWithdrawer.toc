@@ -1,0 +1,9 @@
+## Interface: 60000
+## Version: 1.0.0
+## Title: Vellum Withdrawer
+## Notes: This AddOn will automatically withdraw all your enchanting vellums from reagent bank.
+## Author: Sharparam
+## SavedVariables: VellumWithdrawerDB
+## SavedVariablesPerCharacter: VellumWithdrawerCharDB
+
+main.lua
