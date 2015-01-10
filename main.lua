@@ -42,7 +42,7 @@ function T:RunCheck()
 
     for i = 1, GetContainerNumSlots(REAGENTBANK_CONTAINER) do
         local id = GetContainerItemID(REAGENTBANK_CONTAINER, i)
-        if id == VELLUM_ID then
+        if id == VELLUM_ID or db.Items[id] or cdb.Items[id] then
             UseContainerItem(REAGENTBANK_CONTAINER, i)
         end
     end
@@ -55,20 +55,30 @@ function T.Events.ADDON_LOADED(name)
         VellumWithdrawerDB = {}
     end
 
-    db = VellumWithdrawerDB
+    T.DB = VellumWithdrawerDB
+    db = T.DB
 
     if type(db.Enabled) ~= "boolean" then
         db.Enabled = true
+    end
+
+    if type(db.Items) ~= "table" then
+        db.Items = {}
     end
 
     if type(VellumWithdrawerCharDB) ~= "table" then
         VellumWithdrawerCharDB = {}
     end
 
-    cdb = VellumWithdrawerCharDB
+    T.CDB = VellumWithdrawerCharDB
+    cdb = T.CDB
 
     if type(cdb.Enabled) ~= "boolean" then
         cdb.Enabled = db.Enabled
+    end
+
+    if type(cdb.Items) ~= "table" then
+        cdb.Items = {}
     end
 end
 
@@ -106,6 +116,8 @@ SlashCmdList.VELLUMWITHDRAWER = function(msg, editBox)
         log("%s for this character", cdb.Enabled and "Enabled" or "Disabled")
     elseif msg:match("^n") then
         T:RunCheck()
+    elseif msg:match("^o") then
+        T.Options:Open()
     else
         db.Enabled = not db.Enabled
         log("%s", db.Enabled and "Enabled" or "Disabled")
