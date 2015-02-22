@@ -90,8 +90,18 @@ panel:SetScript("OnShow", function(self)
     end)
     charEnabledCheck:SetPoint("LEFT", enabledCheck, "RIGHT", 250, 0)
 
+    local autoDepositCheck = checkbox("Auto deposit", function(check, checked)
+        T.DB.AutoDeposit = checked
+    end)
+    autoDepositCheck:SetPoint("TOPLEFT", enabledCheck, "BOTTOMLEFT", 0, -16)
+
+    local charAutoDepositCheck = checkbox("Auto deposit on this character", function(check, checked)
+        T.CDB.AutoDeposit = checked
+    end)
+    charAutoDepositCheck:SetPoint("LEFT", autoDepositCheck, "RIGHT", 250, 0)
+
     local itemsDesc = self:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-    itemsDesc:SetPoint("TOPLEFT", enabledCheck, "BOTTOMLEFT", 0, -16)
+    itemsDesc:SetPoint("TOPLEFT", autoDepositCheck, "BOTTOMLEFT", 0, -16)
     itemsDesc:SetText("Additional items to withdraw (item ID, name, or link, separate with commas).|nPress <ENTER> or the apply button to apply changes.")
     itemsDesc:SetTextColor(1, 1, 1)
 

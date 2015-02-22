@@ -66,6 +66,10 @@ function T.Events.ADDON_LOADED(name)
         db.Items = {}
     end
 
+    if type(db.AutoDeposit) ~= "boolean" then
+        db.AutoDeposit = false
+    end
+
     if type(VellumWithdrawerCharDB) ~= "table" then
         VellumWithdrawerCharDB = {}
     end
@@ -80,11 +84,19 @@ function T.Events.ADDON_LOADED(name)
     if type(cdb.Items) ~= "table" then
         cdb.Items = {}
     end
+
+    if type(cdb.AutoDeposit) ~= "boolean" then
+        cdb.AutoDeposit = false
+    end
 end
 
 function T.Events.BANKFRAME_OPENED()
     bank_open = true
-    T:RunCheck()
+    if db.AutoDeposit and cdb.AutoDeposit then
+        DepositReagentBank()
+    else
+        T:RunCheck()
+    end
 end
 
 function T.Events.BANKFRAME_CLOSED()
@@ -118,6 +130,12 @@ SlashCmdList.VELLUMWITHDRAWER = function(msg, editBox)
         T:RunCheck()
     elseif msg:match("^o") then
         T.Options:Open()
+    elseif msg:match("^d") then
+        db.AutoDeposit = not db.AutoDeposit
+        log("Auto deposit %s", db.AutoDeposit and "enabled" or "disabled")
+    elseif msg:match("^d[%w%s]-c") then
+        cdb.AutoDeposit = not cdb.AutoDeposit
+        log("Auto deposit %s for this character", cdb.AutoDeposit and "enabled" or "disabled")
     else
         db.Enabled = not db.Enabled
         log("%s", db.Enabled and "Enabled" or "Disabled")
